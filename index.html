@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RE/MAX SU • Portföy Vitrini</title>
+<style>
+:root{--red:#e5243f;--navy:#06152a}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--navy);color:#fff;font-family:Arial,Helvetica,sans-serif}
+.stage{position:relative;width:100vw;height:100vh;background:var(--navy)}
+.blur{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(24px) brightness(.48) saturate(.9);transform:scale(1.06)}
+.photoArea{position:absolute;inset:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.photoArea img{width:100%;height:100%;object-fit:cover;object-position:center;transition:opacity .35s ease}
+.photoArea img.land{object-fit:contain;padding:0}
+.photoArea:after{content:"";position:absolute;inset:0;background:
+linear-gradient(90deg,rgba(5,18,36,.97) 0%,rgba(5,18,36,.82) 23%,rgba(5,18,36,.38) 43%,rgba(5,18,36,.08) 68%,rgba(5,18,36,.12) 100%),
+linear-gradient(0deg,rgba(5,18,36,.62) 0%,rgba(5,18,36,.16) 38%,rgba(5,18,36,.08) 100%)}
+.top{position:absolute;left:3.5vw;right:3.5vw;top:3vh;display:flex;justify-content:space-between;z-index:5}
+.brand{font-size:22px;font-weight:900;letter-spacing:.03em}.brand small{display:block;font-size:9px;font-weight:500;letter-spacing:.24em;color:#bdc8d6;margin-top:2px}
+.info{position:absolute;left:3.5vw;bottom:8.5vh;width:min(620px,36vw);z-index:5}.badge{display:inline-block;background:var(--red);border-radius:99px;padding:8px 13px;font-weight:800;font-size:12px;letter-spacing:.12em}
+.title{font-size:clamp(32px,2.65vw,52px);line-height:1.04;font-weight:900;text-transform:uppercase;margin:15px 0 12px;letter-spacing:-.035em;text-shadow:0 4px 24px rgba(0,0,0,.42)}.loc{font-size:17px;color:#d7e0ec;margin-bottom:18px;text-shadow:0 3px 14px rgba(0,0,0,.35)}
+.facts{display:flex;gap:8px;flex-wrap:wrap}.fact{border:1px solid rgba(255,255,255,.2);background:rgba(4,17,34,.5);border-radius:10px;padding:9px 12px;font-size:14px}
+.pno{margin-top:16px;color:#b4c3d5;font-size:12px;letter-spacing:.16em}
+.agent{position:absolute;right:3.2vw;bottom:6.6vh;z-index:6;display:flex;align-items:center;gap:13px;background:rgba(5,20,40,.82);border:1px solid rgba(255,255,255,.16);padding:10px 15px 10px 10px;border-radius:17px;backdrop-filter:blur(14px);box-shadow:0 16px 42px rgba(0,0,0,.24)}
+.agent img,.fallback{width:66px;height:66px;border-radius:13px;object-fit:cover;background:#eef2f7;border:2px solid #fff}.fallback{display:grid;place-items:center;color:#17365f;font-weight:900}
+.agent small{display:block;color:#9eb0c5;font-size:9px;letter-spacing:.13em;margin-bottom:5px}.agent strong{font-size:19px}
+.controls{position:absolute;left:50%;bottom:2vh;transform:translateX(-50%);z-index:10;display:flex;gap:7px;opacity:.12}.stage:hover .controls{opacity:1}.controls button{background:rgba(5,18,35,.85);color:#fff;border:1px solid rgba(255,255,255,.18);padding:7px 11px;border-radius:8px}
+.progress{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.12);z-index:10}.progress i{display:block;height:100%;background:var(--red);width:0}
+.error{position:absolute;inset:0;display:none;place-items:center;background:var(--navy);z-index:30;text-align:center;padding:30px}.error p{color:#b7c3d2}
+@media(max-width:1100px){.info{width:46vw}.title{font-size:36px}.agent{right:2vw}.photoArea:after{background:linear-gradient(90deg,rgba(5,18,36,.95) 0%,rgba(5,18,36,.68) 35%,rgba(5,18,36,.12) 72%),linear-gradient(0deg,rgba(5,18,36,.58),transparent 40%)}}
+@media(max-width:760px){.info{left:5vw;right:5vw;width:auto;bottom:8vh}.title{font-size:31px}.agent{top:9vh;bottom:auto;right:4vw}.agent img,.fallback{width:52px;height:52px}.photoArea:after{background:linear-gradient(0deg,rgba(5,18,36,.96) 0%,rgba(5,18,36,.52) 55%,rgba(5,18,36,.12) 100%)}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="blur" id="blur"></div>
+<div class="photoArea"><img id="photo" alt=""></div>
+<div class="top"><div class="brand">RE/MAX SU<small>PORTFÖY VİTRİNİ</small></div><div><span id="idx">0</span> / <span id="total">0</span></div></div>
+<section class="info">
+<div class="badge" id="badge">PORTFÖY</div>
+<div class="title" id="title">Yükleniyor…</div>
+<div class="loc" id="loc"></div>
+<div class="facts" id="facts"></div>
+<div class="pno" id="pno"></div>
+</section>
+<aside class="agent"><div id="agentPic"><div class="fallback">SU</div></div><div><small>GAYRİMENKUL DANIŞMANI</small><strong id="agentName">RE/MAX SU</strong></div></aside>
+<div class="controls"><button id="prev">‹ Önceki</button><button id="pause">Ⅱ Duraklat</button><button id="next">Sonraki ›</button><button id="full">⛶ Tam ekran</button></div>
+<div class="progress"><i id="bar"></i></div>
+<div class="error" id="error"><div><h1>Portföy verisi alınamadı</h1><p id="err"></p></div></div>
+</main>
+<script>
+const D=12000,R=300000;let a=[],i=0,p=false,t;const $=x=>document.getElementById(x),bar=$('bar');
+function initials(n){return(n||'SU').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()}
+function render(){
+ if(!a.length)return;const x=a[i];
+ $('idx').textContent=i+1;$('total').textContent=a.length;$('badge').textContent=x.status||'PORTFÖY';$('title').textContent=x.title;$('loc').textContent=x.location;$('pno').textContent='PORTFÖY NO • '+x.portfolioNo;$('agentName').textContent=x.agentName||'RE/MAX SU';
+ $('photo').src=x.image;$('photo').classList.toggle('land',!!x.isLand);$('blur').style.backgroundImage='url("'+x.image+'")';
+ const f=[];if(x.room)f.push(x.room+' ODA');if(x.sqm)f.push(x.sqm+' m²');if(x.floor)f.push('KAT '+x.floor);if(x.category)f.push(x.category);$('facts').innerHTML=f.map(v=>'<div class="fact">'+v+'</div>').join('');
+ $('agentPic').innerHTML=x.agentPhoto?'<img src="'+x.agentPhoto+'" alt="'+(x.agentName||'')+'" onerror="this.outerHTML=\'<div class=\'fallback\'>'+initials(x.agentName)+'</div>\'">':'<div class="fallback">'+initials(x.agentName)+'</div>';
+ restart();
+}
+function restart(){clearInterval(t);bar.style.transition='none';bar.style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.style.transition='width '+D+'ms linear';bar.style.width=p?'0':'100%'}));if(!p)t=setInterval(()=>go(1),D)}
+function go(d){if(!a.length)return;i=(i+d+a.length)%a.length;render()}
+async function load(silent=false){
+ try{
+  const r=await fetch('/api/live-portfolios',{cache:'no-store'});const raw=await r.text();let j;
+  try{j=JSON.parse(raw)}catch{throw new Error('Sunucu JSON döndürmedi: '+raw.slice(0,120))}
+  if(!r.ok||!j.items||!j.items.length)throw new Error(j.detail||j.error||'Portföy bulunamadı');
+  const current=a[i]?.portfolioNo;a=j.items;i=current?Math.max(0,a.findIndex(x=>x.portfolioNo===current)):0;$('error').style.display='none';render();
+ }catch(e){if(!silent){$('err').textContent=e.message;$('error').style.display='grid'}}
+}
+$('prev').onclick=()=>go(-1);$('next').onclick=()=>go(1);$('pause').onclick=()=>{p=!p;$('pause').textContent=p?'▶ Oynat':'Ⅱ Duraklat';restart()};$('full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);if(e.key===' '){e.preventDefault();$('pause').click()}if(e.key.toLowerCase()==='f')$('full').click()});
+load();setInterval(()=>load(true),R);
+</script>
+</body>
+</html>

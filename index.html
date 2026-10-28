@@ -63,8 +63,8 @@ function restart(){clearInterval(t);bar.style.transition='none';bar.style.width=
 function go(d){if(!a.length)return;i=(i+d+a.length)%a.length;render()}
 async function load(silent=false){
  try{
-  const r=await fetch('/api/live-portfolios',{cache:'no-store'});const raw=await r.text();let j;
-  try{j=JSON.parse(raw)}catch{throw new Error('Sunucu JSON döndürmedi: '+raw.slice(0,120))}
+  const r=await fetch('./portfolios.json?ts='+Date.now(),{cache:'no-store'});const raw=await r.text();let j;
+  try{j=JSON.parse(raw)}catch{throw new Error('Portföy JSON verisi okunamadı: '+raw.slice(0,120))}
   if(!r.ok||!j.items||!j.items.length)throw new Error(j.detail||j.error||'Portföy bulunamadı');
   const current=a[i]?.portfolioNo;a=j.items;i=current?Math.max(0,a.findIndex(x=>x.portfolioNo===current)):0;$('error').style.display='none';render();
  }catch(e){if(!silent){$('err').textContent=e.message;$('error').style.display='grid'}}
